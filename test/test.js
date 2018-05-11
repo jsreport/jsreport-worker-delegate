@@ -14,7 +14,18 @@ describe('delegate', () => {
         url: 'http://localhost:6000/'
       }))
 
-    sandboxServer = Worker({ httpPort: 6000, scriptManager: { strategy: 'in-process' } })
+    sandboxServer = Worker({
+      httpPort: 6000,
+      scriptManager: { strategy: 'in-process' },
+      extensions: {
+        'chrome-pdf': {
+          launchOptions: {
+            args: ['--no-sandbox']
+          }
+        }
+      }
+    })
+
     return reporter.init()
   })
 
@@ -33,7 +44,7 @@ describe('delegate', () => {
     })
 
     res.content.toString().should.containEql('PDF')
-    res.meta.logs.map(l => l.message).should.containEql('Delegating recipe')
+    res.meta.logs.map(l => l.message).find(m => m.includes('Delegating recipe')).should.be.ok()
   })
 
   it('should also render headers in pdf', async () => {
