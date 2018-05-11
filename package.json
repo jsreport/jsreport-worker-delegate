@@ -1,0 +1,29 @@
+{
+  "name": "jsreport-sanbox-delegate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "standard": {
+    "env": {
+      "mocha": true,
+      "node": true
+    }
+  },
+  "author": "Jan Blaha",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "4.19.1",
+    "mocha": "5.1.0",
+    "should": "13.2.1",
+    "standard": "11.0.1"
+  },
+  "dependencies": {
+    "axios": "0.18.0",
+    "jsreport-chrome-pdf": "github:jsreport/jsreport-chrome-pdf#2.0.0-beta",
+    "jsreport-core": "github:jsreport/jsreport-core#2.0.0-beta",
+    "puppeteer": "1.3.0"
+  }
+}
