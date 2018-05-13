@@ -1,4 +1,4 @@
 module.exports = {
-  'name': 'sandbox-delegate',
+  'name': 'worker-delegate',
   'main': 'lib/delegate.js'
 }
