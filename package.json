@@ -1,5 +1,5 @@
 {
-  "name": "jsreport-sanbox-delegate",
+  "name": "jsreport-worker-delegate",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
