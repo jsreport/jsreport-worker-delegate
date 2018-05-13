@@ -1,3 +1,4 @@
+const parsePdf = require('./parsePdf')
 const jsreport = require('jsreport-core')
 const Worker = require('jsreport-worker')
 require('should')
@@ -43,7 +44,8 @@ describe('delegate', () => {
       }
     })
 
-    res.content.toString().should.containEql('PDF')
+    const parsed = await parsePdf(res.content)
+    parsed.pages[0].text.should.containEql('foo')
     res.meta.logs.map(l => l.message).find(m => m.includes('Delegating recipe')).should.be.ok()
   })
 
