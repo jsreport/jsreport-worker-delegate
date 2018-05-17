@@ -1,4 +1,4 @@
-const parsePdf = require('./parsePdf')
+const parsePdf = require('parse-pdf')
 const jsreport = require('jsreport-core')
 const Worker = require('jsreport-worker')
 require('should')
