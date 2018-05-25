@@ -12,7 +12,7 @@ describe('delegate', () => {
       .use(require('jsreport-chrome-pdf')())
       .use(require('jsreport-handlebars')())
       .use(require('../')({
-        url: 'http://localhost:6000/'
+        workerUrl: 'http://localhost:6000/'
       }))
 
     sandboxServer = Worker({
@@ -91,5 +91,63 @@ describe('delegate', () => {
 
     res.content.toString().should.be.eql('hello')
     res.meta.logs.map(l => l.message).should.containEql('Delegating script to worker')
+  })
+
+  it('should call delegate api on success', async () => {
+    let called = false
+
+    reporter.workerDelagate.getWorker = async (req) => {
+      return {
+        url: reporter.options.extensions['worker-delegate'].workerUrl,
+        release: async (err) => {
+          if (err) {
+            throw new Error(`it was supposed to call release with no error, error: ${err.stack}`)
+          }
+
+          called = true
+        }
+      }
+    }
+
+    await reporter.render({
+      template: {
+        content: '{{foo}}',
+        recipe: 'html',
+        engine: 'handlebars'
+      },
+      data: { foo: 'hello' }
+    })
+
+    called.should.be.True()
+  })
+
+  it('should call delegate api on error', async () => {
+    let errorInCall = null
+
+    reporter.workerDelagate.getWorker = async (req) => {
+      return {
+        url: reporter.options.extensions['worker-delegate'].workerUrl,
+        release: async (err) => {
+          if (err) {
+            errorInCall = err
+          }
+        }
+      }
+    }
+
+    try {
+      await reporter.render({
+        template: {
+          content: '{{{foo}}',
+          recipe: 'html',
+          engine: 'handlebars'
+        },
+        data: { foo: 'hello' }
+      })
+
+      throw new Error(`it was supposed to call release with error`)
+    } catch (e) {
+      errorInCall.should.be.Error()
+    }
   })
 })
